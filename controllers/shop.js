@@ -55,9 +55,19 @@ exports.getCart = (req, res, next) => {
 }
 
 exports.postCart = (req, res, next) => {
+
+    /* 
+        <form action='/cart' method="POST">
+            <button class="btn" type="submit">Add To Cart</button>
+            <!-- 'hidden' does not display the input -->
+            <input type="hidden" name="id" value="<%= product.id %>">
+        </form>
+    */
+    // id is from the one above in /includes/addToCart.ejs
     const id = req.body.id;
-    // console.log('id at postCart', id);
+
     Product.findProductById(id, product =>{
+        // console.log('product@findProdut : ', product);
         Cart.addProduct(product.id, product.price);
     });
     res.redirect('/cart');

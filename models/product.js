@@ -48,9 +48,10 @@ module.exports = class Product {
         // first callback
         getProductsFromFile(products => {
             const product = products.find(product => product.id === id);
-            console.log('product: ', product);
+            // console.log('product: ', product);
             
             // second call back that runs in shop.js in controllers
+            // The parameter here is an literal object that is produced products.find() abaove
             callback(product);
         });
     }
