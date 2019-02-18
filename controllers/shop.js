@@ -49,8 +49,8 @@ exports.getCart = (req, res, next) => {
 
     // static function inside of callback
 
-    // in order to get detail product info from products.json
-    //  create a cart product list
+    // in order to get detail product info from 'products.json'
+    //  and also get qty info from 'cart.json'
     Cart.getCart(cart => {
         Product.fetchAll(products => {
             const cartProducts = [];
@@ -89,6 +89,7 @@ exports.postCart = (req, res, next) => {
         Cart.addProduct(product.id, product.price);
     });
 
+    // It should be run in Promise
     res.redirect('/cart');
 
 }

@@ -17,12 +17,14 @@ exports.getAddProducts = (req, res, next) => {
 
 exports.getEditProduct = (req, res, next) => {
 
+    // ******************
     // We can always check the query by using 'req.query'.
     //      'req.query' is managed by express, by the way.
-    // Therefore, it can track down 'edit true'and title=new' of /12345?edit=true&title=new
+    // Therefore, it can track down 'edit true' and title=new' of /12345?edit=true&title=new
     console.log('req.query: ', req.query); // => req.query:  { edit: 'true', new: 'title' }
 
-    // Based on '/12345?edit=true&title=new'
+    // <a href="/admin/editProduct/<%= product.id %>?edit=true" class="btn">Edit</a> in 'admin/products.ejs'
+    // Based on "action = /12345?edit=true" in 'products.ejs'
     // the value of the down below is String "true" instead of Boolean true
     const editMode = req.query.edit;
     console.log('editMode:', editMode);
@@ -89,8 +91,6 @@ exports.getProducts = (req, res, next) => {
 // to transfer 'user input data' to the database
 exports.postAddProducts = (req, res, next) => {
     
-    console.log('req.body.title: ', req.body.title);
-
     const {title, imageUrl, description, price } = req.body;
     
     // 'product' for a particular document, not for all ducuments in a collectionn. 
