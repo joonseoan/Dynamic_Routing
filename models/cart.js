@@ -32,7 +32,7 @@ module.exports = class Cart {
             // [Array methods]
             // findIndex : returns index number of element(s) in an arry
             // find : returns element(s) if the condition is true
-            // findOne: returns an element if the condition is true
+            // ref] findOne is a query of mongoDB
             console.log('existingProductIndex from findIndex(): ', existingProductIndex) // => 0 
             
             // get an entire element
@@ -52,15 +52,58 @@ module.exports = class Cart {
                 cart.products[existingProductIndex] = updatedProduct;
             } else {
                 updatedProduct = { id, qty: 1};
+
+                // *********************** Deep Clone!!!!
                 cart.products = [ ...cart.products, updatedProduct ];
             }
             // +productPrice :  type (String -> Number)
             cart.totalPrice = cart.totalPrice + +productPrice;  
+            
             fs.writeFile(filePath, JSON.stringify(cart), err => {
                 console.log(err);
             });
         });
 
+    }
+
+    static deleteProduct(id, price) {
+        fs.readFile(filePath, (err, res) => {
+            if(err) {
+                return;
+            }
+            // must be object type that javascript can read.
+            //      when we read a file 
+            const updatedCart = { ...JSON.parse(res) };
+            
+            const product = updatedCart.products.find(product => product.id === id);
+            
+            if(!product) {
+                return;
+            }
+            
+            const prodcutQty = product.qty;
+            
+            // remove the product
+            updatedCart.products = updatedCart.products.filter(product => product.id !== id);
+            
+            // substract the total price of the product
+            updatedCart.totalPrice = updatedCart.totalPrice - (price * prodcutQty);
+
+            fs.writeFile(filePath, JSON.stringify(updatedCart), err => {
+                console.log(err);
+            })
+        });
+    }   
+
+    static getCart(callback) {
+        fs.readFile(filePath, (err, res) => {
+            const productsInCart = JSON.parse(res);
+            if(err) {
+                callback(null);
+            } else {
+                callback(productsInCart);
+            }
+        });
     }
 
 }
